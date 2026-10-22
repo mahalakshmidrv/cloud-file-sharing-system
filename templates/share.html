@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Share {{ file['original_name'] }}{% endblock %}
+{% block content %}
+<p><a href="{{ url_for('dashboard') }}">&larr; Back to my files</a></p>
+<h1>Share: {{ file['original_name'] }}</h1>
+<p class="muted">{{ file['size']|filesize }} &middot; uploaded {{ file['uploaded_at']|pretty_time }}</p>
+
+<section class="card">
+  <h2>Share with a user</h2>
+  <form method="post" action="{{ url_for('share_with_user', file_id=file['id']) }}" class="row">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <input name="username" placeholder="Their username" required>
+    <button class="btn" type="submit">Share</button>
+  </form>
+  {% if shares %}
+  <table>
+    <thead><tr><th>User</th><th>Since</th><th></th></tr></thead>
+    <tbody>
+    {% for s in shares %}
+      <tr>
+        <td>{{ s['username'] }}</td>
+        <td>{{ s['created_at']|pretty_time }}</td>
+        <td>
+          <form method="post" action="{{ url_for('unshare', file_id=file['id'], share_id=s['id']) }}" class="inline">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <button class="btn small danger" type="submit">Remove</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p class="muted">Not shared with anyone yet.</p>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h2>Public links</h2>
+  <p class="muted">Anyone with a link can download this file until it expires or you revoke it.</p>
+  <form method="post" action="{{ url_for('create_link', file_id=file['id']) }}" class="row">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label class="inline-label">Expires after
+      <select name="expiry">
+        {% for c in expiry_choices %}<option value="{{ c }}" {% if c == '24h' %}selected{% endif %}>{{ c }}</option>{% endfor %}
+      </select>
+    </label>
+    <button class="btn" type="submit">Create link</button>
+  </form>
+  {% if links %}
+  <table>
+    <thead><tr><th>Link</th><th>Status</th><th>Expires</th><th>Downloads</th><th></th></tr></thead>
+    <tbody>
+    {% for l in links %}
+      <tr>
+        <td><input class="mono" readonly value="{{ l['url'] }}" onclick="this.select()"></td>
+        <td><span class="pill {{ l['state'] }}">{{ l['state'] }}</span></td>
+        <td>{{ l['row']['expires_at']|pretty_time }}</td>
+        <td>{{ l['row']['downloads'] }}</td>
+        <td>
+          {% if l['state'] == 'active' %}
+          <form method="post" action="{{ url_for('revoke_link', file_id=file['id'], link_id=l['row']['id']) }}" class="inline">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <button class="btn small danger" type="submit">Revoke</button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</section>
+{% endblock %}

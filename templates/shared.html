@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Shared with me{% endblock %}
+{% block content %}
+<h1>Shared with me</h1>
+<section class="card">
+  {% if files %}
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Name</th><th>Owner</th><th>Size</th><th>Shared</th><th></th></tr></thead>
+    <tbody>
+    {% for f in files %}
+      <tr>
+        <td>{{ f['original_name'] }}</td>
+        <td>{{ f['owner_name'] }}</td>
+        <td>{{ f['size']|filesize }}</td>
+        <td>{{ f['shared_at']|pretty_time }}</td>
+        <td><a class="btn small" href="{{ url_for('download', file_id=f['id']) }}">Download</a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% else %}
+    <p class="muted">Nobody has shared a file with you yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

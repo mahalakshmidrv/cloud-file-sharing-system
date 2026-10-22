@@ -1,0 +1,57 @@
+:root {
+  --bg: #f4f6fb; --card: #fff; --text: #1d2433; --muted: #6b7385;
+  --primary: #3b6cf6; --primary-dark: #2c55cc; --danger: #d64545; --border: #e2e6f0;
+  --ok: #1f9d55; --warn: #c98a07;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+       background: var(--bg); color: var(--text); line-height: 1.5; min-height: 100vh;
+       display: flex; flex-direction: column; }
+a { color: var(--primary); text-decoration: none; } a:hover { text-decoration: underline; }
+.topbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
+          gap: .5rem; background: #101a33; color: #fff; padding: .75rem 1.25rem; }
+.topbar a { color: #dbe4ff; } .brand { font-weight: 700; font-size: 1.15rem; color: #fff !important; }
+.topbar nav { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+.who { color: #9fb3ff; font-size: .9rem; }
+.container { flex: 1; width: 100%; max-width: 980px; margin: 1.5rem auto; padding: 0 1rem; }
+.footer { text-align: center; color: var(--muted); font-size: .85rem; padding: 1rem; }
+h1 { margin: 0 0 1rem; font-size: 1.6rem; } h2 { margin: 0 0 .75rem; font-size: 1.1rem; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+        padding: 1.25rem; margin-bottom: 1.25rem; box-shadow: 0 1px 3px rgba(16,26,51,.05); }
+.card.narrow { max-width: 440px; margin: 2rem auto; }
+label { display: block; margin-bottom: .9rem; font-weight: 600; font-size: .9rem; }
+label input, label select { margin-top: .3rem; }
+input, select { width: 100%; padding: .55rem .7rem; border: 1px solid var(--border);
+                border-radius: 8px; font: inherit; background: #fff; }
+input[type=file] { border: 1px dashed var(--border); padding: .5rem; }
+.row { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; }
+.row input:not([type=file]) { flex: 1; min-width: 160px; width: auto; }
+.row.between { justify-content: space-between; margin-bottom: .75rem; }
+.inline { display: inline; } .inline-label { margin: 0; display: flex; align-items: center; gap: .5rem; }
+.inline-label select { width: auto; margin: 0; }
+.btn { display: inline-block; background: var(--primary); color: #fff; border: 0; border-radius: 8px;
+       padding: .55rem 1rem; font: inherit; font-weight: 600; cursor: pointer; text-decoration: none; }
+.btn:hover { background: var(--primary-dark); text-decoration: none; }
+.btn.secondary { background: #e8edfb; color: var(--primary-dark); } .btn.secondary:hover { background: #d8e0f7; }
+.btn.danger { background: #fdeaea; color: var(--danger); } .btn.danger:hover { background: #f8d4d4; }
+.btn.small { padding: .3rem .65rem; font-size: .85rem; }
+.link-btn { background: none; border: 0; color: #dbe4ff; cursor: pointer; font: inherit; padding: 0; }
+.muted { color: var(--muted); } .mono { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .8rem; word-break: break-all; }
+.small-text { font-size: .75rem; margin-top: 1rem; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; margin-top: .75rem; }
+th, td { text-align: left; padding: .6rem .5rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+th { font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+td.actions { white-space: nowrap; display: flex; gap: .4rem; align-items: center; }
+details summary { cursor: pointer; font-weight: 600; } details[open] summary { margin-bottom: .5rem; }
+.flash { padding: .75rem 1rem; border-radius: 8px; margin-bottom: 1rem; border: 1px solid; }
+.flash.success { background: #e8f7ee; border-color: #b7e4c7; color: #17653a; }
+.flash.error { background: #fdeaea; border-color: #f5c2c2; color: #9b2c2c; }
+.flash.info { background: #eaf1ff; border-color: #c4d4fb; color: #274bb0; }
+.pill { padding: .15rem .55rem; border-radius: 999px; font-size: .75rem; font-weight: 600; background: #eaf1ff; color: #274bb0; }
+.pill.active { background: #e8f7ee; color: var(--ok); }
+.pill.expired { background: #fff4de; color: var(--warn); }
+.pill.revoked { background: #fdeaea; color: var(--danger); }
+.quota { margin-top: .75rem; } .bar { height: 10px; background: #e8edfb; border-radius: 999px; overflow: hidden; }
+.bar span { display: block; height: 100%; background: var(--primary); }
+@media (max-width: 600px) { td.actions { flex-wrap: wrap; } }

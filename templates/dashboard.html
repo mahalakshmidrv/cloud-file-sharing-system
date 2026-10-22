@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}My files{% endblock %}
+{% block content %}
+<h1>My files</h1>
+
+<section class="card">
+  <h2>Upload</h2>
+  <form method="post" action="{{ url_for('upload') }}" enctype="multipart/form-data" class="row">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <input type="file" name="files" multiple required>
+    <button class="btn" type="submit">Upload</button>
+  </form>
+  <p class="muted">Max {{ max_upload|filesize }} per request.</p>
+  <div class="quota">
+    <div class="bar"><span style="width: {{ percent }}%"></span></div>
+    <small>{{ used|filesize }} of {{ quota|filesize }} used ({{ percent }}%)</small>
+  </div>
+</section>
+
+<section class="card">
+  <div class="row between">
+    <h2>Your files ({{ files|length }})</h2>
+    <form method="get" class="row">
+      <input type="search" name="q" value="{{ q }}" placeholder="Search by name">
+      <button class="btn secondary" type="submit">Search</button>
+    </form>
+  </div>
+  {% if files %}
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Name</th><th>Size</th><th>Uploaded</th><th>Actions</th></tr></thead>
+    <tbody>
+    {% for f in files %}
+      <tr>
+        <td>
+          <details>
+            <summary>{{ f['original_name'] }}</summary>
+            <form method="post" action="{{ url_for('rename', file_id=f['id']) }}" class="row">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+              <input name="name" value="{{ f['original_name'] }}" required>
+              <button class="btn small secondary" type="submit">Rename</button>
+            </form>
+            <small class="muted mono">SHA-256: {{ f['sha256'] }}</small>
+          </details>
+        </td>
+        <td>{{ f['size']|filesize }}</td>
+        <td>{{ f['uploaded_at']|pretty_time }}</td>
+        <td class="actions">
+          <a class="btn small" href="{{ url_for('download', file_id=f['id']) }}">Download</a>
+          <a class="btn small secondary" href="{{ url_for('share_page', file_id=f['id']) }}">Share</a>
+          <form method="post" action="{{ url_for('delete', file_id=f['id']) }}" class="inline"
+                onsubmit="return confirm('Delete this file permanently?');">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <button class="btn small danger" type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% else %}
+    <p class="muted">{% if q %}No files match "{{ q }}".{% else %}No files yet. Upload your first file above.{% endif %}</p>
+  {% endif %}
+</section>
+{% endblock %}
